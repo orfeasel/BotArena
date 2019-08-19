@@ -16,7 +16,7 @@ void ABotController::OnPossess(APawn* InPawn)
 
 	if (!BTAsset)
 	{
-		GLog->Log("invalid bt");//warning
+		UE_LOG(LogTemp, Warning, TEXT("Invalid BT Asset"));
 		return;
 	}
 
@@ -31,8 +31,7 @@ void ABotController::Tick(float DeltaTime)
 	UBlackboardComponent* BlackboardComp = GetBlackboardComponent();
 	if (!IsFollowingAPath() && BlackboardComp)
 	{	
-		BlackboardComp->SetValueAsVector(BlackboardKey_MoveLocation, GetPawn()->GetActorLocation() + GetPawn()->GetActorForwardVector()*250.f);
-		GLog->Log("updated path on tick");
+		BlackboardComp->SetValueAsVector(BlackboardKey_MoveLocation, GetPawn()->GetActorLocation() + GetPawn()->GetActorForwardVector()*1250.f);
 	}
 }
 

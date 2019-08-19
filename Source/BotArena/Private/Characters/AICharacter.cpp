@@ -25,6 +25,11 @@ void AAICharacter::BeginPlay()
 	
 }
 
+void AAICharacter::AssignTeam_Implementation(ETeam NewTeam)
+{
+	Team = NewTeam;
+}
+
 // Called every frame
 void AAICharacter::Tick(float DeltaTime)
 {
