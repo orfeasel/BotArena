@@ -15,7 +15,7 @@ AAICharacter::AAICharacter()
 
 	//FAttachmentTransformRules WeaponAttachmentRules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget,tr);
 	WeaponSM->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget,true),FName("WeaponSocket"));
-	
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 // Called when the game starts or when spawned
