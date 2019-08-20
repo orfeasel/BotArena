@@ -13,13 +13,14 @@
 #include "Perception/AISenseConfig_Hearing.h"
 #include "Perception/AIPerceptionTypes.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
-
+#include "AICharacter.h"
 
 
 ABotController::ABotController()
 {
 	//Keys init
 	BlackboardKey_MoveLocation = FName("MoveLocation");
+	BlackboardKey_SelectedTarget = FName("SelectedTarget");
 
 	//Create the AI perception component
 	if (!GetPerceptionComponent())
@@ -34,15 +35,49 @@ ABotController::ABotController()
 	
 }
 
+void ABotController::SelectTarget(const TArray<AActor*>& TargetList)
+{
+	ensure(GetBlackboardComponent());
+
+	AAICharacter* ControlledCharacter = Cast<AAICharacter>(GetCharacter());
+
+	if (!ControlledCharacter || TargetList.Num()<=0) return;
+
+	//Search for the closest target
+	float ClosestDistance = 99999.f;
+	AAICharacter* SelectedTarget = nullptr;
+	FVector CharacterLocation = ControlledCharacter->GetActorLocation();
+
+	for (int32 TargetIndex = 0; TargetIndex < TargetList.Num(); TargetIndex++)
+	{
+		//Only choose a target from Bots
+		AAICharacter* Bot = Cast<AAICharacter>(TargetList[TargetIndex]);
+		if (Bot)
+		{
+			if (ControlledCharacter->IsHostile(*Bot))
+			{
+				if ((Bot->GetActorLocation() - CharacterLocation).Size() < ClosestDistance)
+				{
+					ClosestDistance = (Bot->GetActorLocation() - CharacterLocation).Size();
+					SelectedTarget = Bot;
+				}
+			}
+		}
+	}
+	GLog->Log("selected target from sensed actors!");
+	GetBlackboardComponent()->SetValueAsObject(BlackboardKey_SelectedTarget, SelectedTarget);
+}
+
 void ABotController::OnPerceptionUpdated(const TArray<AActor*>& SensedActors)
 {
 	GLog->Log("On Perception updated!");
+	SelectTarget(SensedActors);
 
-	GLog->Log("sensed actors list:");
+	/*GLog->Log("sensed actors list:");
 	for (int32 i = 0; i < SensedActors.Num(); i++)
 	{
 		GLog->Log(SensedActors[i]->GetName());
-	}
+	}*/
 }
 
 void ABotController::OnPossess(APawn* InPawn)

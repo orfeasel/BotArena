@@ -17,6 +17,9 @@ class BOTARENA_API ABotController : public AAIController
 
 private:
 
+	/* Choose the closest target from the provided data */
+	void SelectTarget(const TArray<AActor*>& TargetList);
+
 	UFUNCTION()
 	void OnPerceptionUpdated(const TArray<AActor*>& SensedActors);
 
@@ -33,18 +36,19 @@ protected:
 	FName BlackboardKey_MoveLocation;
 
 	UPROPERTY(VisibleAnywhere)
+	FName BlackboardKey_SelectedTarget;
+
+	UPROPERTY(VisibleAnywhere)
 	class UAIPerceptionComponent* PerceptionComp;
 
 	UPROPERTY(VisibleAnywhere)
 	class UAIPerceptionStimuliSourceComponent* StimuliSourceComp;
 
-	//virtual void BeginPlay() override;
-
 	virtual void OnPossess(APawn* InPawn) override;
 
 	virtual void Tick(float DeltaTime) override;
 
-public:
+
 
 	
 	

@@ -4,6 +4,8 @@
 #include "AICharacter.h"
 #include "Components/StaticMeshComponent.h"
 
+#include "DrawDebugHelpers.h"
+
 // Sets default values
 AAICharacter::AAICharacter()
 {
@@ -25,9 +27,28 @@ void AAICharacter::BeginPlay()
 	
 }
 
-void AAICharacter::AssignTeam_Implementation(ETeam NewTeam)
+//void AAICharacter::AssignTeam_Implementation(ETeam NewTeam)
+//{
+//	Team = NewTeam;
+//}
+
+void AAICharacter::FireWeapon()
 {
-	Team = NewTeam;
+	ensure(WeaponSM);
+
+	CurrentAmmo--;
+
+	const UWorld* World = GetWorld();
+	if (World)
+	{
+		FVector WeaponMuzzle = WeaponSM->GetSocketLocation(FName("BulletSocket"));
+		FVector BulletEndLocation = WeaponMuzzle + GetActorForwardVector() * BulletRange;
+		DrawDebugLine(World, WeaponMuzzle, BulletEndLocation, FColor::Blue, false, 15.f);
+		DrawDebugPoint(World, WeaponMuzzle, 50.f, FColor::Black, false, 15.f);
+		DrawDebugPoint(World, BulletEndLocation, 50.f, FColor::Red, false, 15.f);
+		GLog->Log("fired weapon!");
+	}
+
 }
 
 // Called every frame

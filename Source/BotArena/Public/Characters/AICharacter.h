@@ -31,13 +31,33 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* WeaponSM;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	ETeam Team;
+
+	UPROPERTY(VisibleAnywhere)
+	float Health = 100.f;
+
+	UPROPERTY(VisibleAnywhere)
+	int32 CurrentAmmo = 30;
+
+	UPROPERTY(EditAnywhere)
+	float BulletRange = 2000.f;
 
 public:	
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "BotArena")
+	/* Assigns a new team to the bot. 
+	 * Make sure to update the Team here as well
+	 * Implemented in Blueprint to apply a material change so we can tell the difference between opposite teams faster
+	 */
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "BotArena")
 	void AssignTeam(ETeam NewTeam);
+
+	UFUNCTION(BlueprintCallable,Category="BotArena")
+	void FireWeapon();
+
+	FORCEINLINE bool IsFriendly(const AAICharacter& OtherCharacter) { return Team == OtherCharacter.Team; }
+
+	FORCEINLINE bool IsHostile(const AAICharacter& OtherCharacter) { return !IsFriendly(OtherCharacter); }
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
