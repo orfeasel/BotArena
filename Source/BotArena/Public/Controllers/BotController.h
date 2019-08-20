@@ -15,6 +15,11 @@ class BOTARENA_API ABotController : public AAIController
 {
 	GENERATED_BODY()
 
+private:
+
+	UFUNCTION()
+	void OnPerceptionUpdated(const TArray<AActor*>& SensedActors);
+
 public:
 
 	ABotController();
@@ -27,10 +32,20 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	FName BlackboardKey_MoveLocation;
 
+	UPROPERTY(VisibleAnywhere)
+	class UAIPerceptionComponent* PerceptionComp;
+
+	UPROPERTY(VisibleAnywhere)
+	class UAIPerceptionStimuliSourceComponent* StimuliSourceComp;
+
 	//virtual void BeginPlay() override;
 
 	virtual void OnPossess(APawn* InPawn) override;
 
 	virtual void Tick(float DeltaTime) override;
+
+public:
+
+	
 	
 };
