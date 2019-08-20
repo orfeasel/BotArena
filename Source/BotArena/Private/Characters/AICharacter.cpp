@@ -44,8 +44,8 @@ void AAICharacter::FireWeapon()
 		FVector WeaponMuzzle = WeaponSM->GetSocketLocation(FName("BulletSocket"));
 		FVector BulletEndLocation = WeaponMuzzle + GetActorForwardVector() * BulletRange;
 		DrawDebugLine(World, WeaponMuzzle, BulletEndLocation, FColor::Blue, false, 15.f);
-		DrawDebugPoint(World, WeaponMuzzle, 50.f, FColor::Black, false, 15.f);
-		DrawDebugPoint(World, BulletEndLocation, 50.f, FColor::Red, false, 15.f);
+		DrawDebugPoint(World, WeaponMuzzle, 10.f, FColor::Black, false, 15.f);
+		DrawDebugPoint(World, BulletEndLocation, 10.f, FColor::Red, false, 15.f);
 		GLog->Log("fired weapon!");
 	}
 
