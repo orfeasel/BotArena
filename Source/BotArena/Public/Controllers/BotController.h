@@ -23,6 +23,11 @@ private:
 	UFUNCTION()
 	void OnPerceptionUpdated(const TArray<AActor*>& SensedActors);
 
+	AActor* GetSelectedTarget() const;
+
+	/* Time in seconds in which the target selection occured */
+	float TimeSinceTargetSelection;
+
 public:
 
 	ABotController();
@@ -43,6 +48,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	FName BlackboardKey_SelectedTarget;
+
+	/* Will only select target if target is dead or last selected target was on the last tick of the interval */
+	UPROPERTY(EditDefaultsOnly)
+	float SelectTargetInterval = 5.f;
 
 	UPROPERTY(VisibleAnywhere)
 	class UAIPerceptionComponent* PerceptionComp;

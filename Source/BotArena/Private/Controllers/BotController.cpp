@@ -63,36 +63,57 @@ void ABotController::SelectTarget(const TArray<AActor*>& TargetList)
 
 	if (!ControlledCharacter || TargetList.Num()<=0) return;
 
-	//Search for the closest target
-	float ClosestDistance = 99999.f;
-	AAICharacter* SelectedTarget = nullptr;
-	FVector CharacterLocation = ControlledCharacter->GetActorLocation();
-
-	for (int32 TargetIndex = 0; TargetIndex < TargetList.Num(); TargetIndex++)
+	if (!GetSelectedTarget() || TimeSinceTargetSelection>=SelectTargetInterval)
 	{
-		//Only choose a target from Bots
-		AAICharacter* Bot = Cast<AAICharacter>(TargetList[TargetIndex]);
-		if (Bot)
+		//Search for the closest target
+		float ClosestDistance = 99999.f;
+		AAICharacter* SelectedTarget = nullptr;
+		FVector CharacterLocation = ControlledCharacter->GetActorLocation();
+
+		//Choose a target
+		for (int32 TargetIndex = 0; TargetIndex < TargetList.Num(); TargetIndex++)
 		{
-			if (ControlledCharacter->IsHostile(*Bot))
+			//Only choose a target from Bots
+			AAICharacter* Bot = Cast<AAICharacter>(TargetList[TargetIndex]);
+			if (Bot)
 			{
-				if ((Bot->GetActorLocation() - CharacterLocation).Size() < ClosestDistance)
+				if (ControlledCharacter->IsHostile(*Bot))
 				{
-					ClosestDistance = (Bot->GetActorLocation() - CharacterLocation).Size();
-					SelectedTarget = Bot;
+					//We have a new closer target
+					if ((Bot->GetActorLocation() - CharacterLocation).Size() < ClosestDistance)
+					{
+						ClosestDistance = (Bot->GetActorLocation() - CharacterLocation).Size();
+						SelectedTarget = Bot;
+						TimeSinceTargetSelection = 0.f;
+						GLog->Log("switched target!");
+					}
 				}
 			}
 		}
+		GLog->Log("selected target from sensed actors!");
+		GetBlackboardComponent()->SetValueAsObject(BlackboardKey_SelectedTarget, SelectedTarget);
 	}
-	GLog->Log("selected target from sensed actors!");
-	GetBlackboardComponent()->SetValueAsObject(BlackboardKey_SelectedTarget, SelectedTarget);
+
 }
 
 void ABotController::OnPerceptionUpdated(const TArray<AActor*>& SensedActors)
 {
-	GLog->Log("On Perception updated!");
+	//GLog->Log("On Perception updated!");
 	SelectTarget(SensedActors);
 
+}
+
+AActor* ABotController::GetSelectedTarget() const
+{
+	if (GetBlackboardComponent())
+	{
+		UObject* Target = GetBlackboardComponent()->GetValueAsObject(BlackboardKey_SelectedTarget);
+		if (Target)
+		{
+			return Cast<AActor>(Target);
+		}
+	}
+	return nullptr;
 }
 
 void ABotController::OnPossess(APawn* InPawn)
@@ -125,6 +146,8 @@ void ABotController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	UBlackboardComponent* BlackBoardComp = GetBlackboardComponent();
+
+	TimeSinceTargetSelection += DeltaTime;
 	
 	if (UObject* SelectedTarget = BlackBoardComp->GetValueAsObject(BlackboardKey_SelectedTarget))
 	{
