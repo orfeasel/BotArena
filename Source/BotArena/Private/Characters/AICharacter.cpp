@@ -3,8 +3,8 @@
 
 #include "AICharacter.h"
 #include "Components/StaticMeshComponent.h"
-
 #include "DrawDebugHelpers.h"
+#include "Controllers/BotController.h"
 
 // Sets default values
 AAICharacter::AAICharacter()
@@ -42,7 +42,18 @@ void AAICharacter::FireWeapon()
 	if (World)
 	{
 		FVector WeaponMuzzle = WeaponSM->GetSocketLocation(FName("BulletSocket"));
-		FVector BulletEndLocation = WeaponMuzzle + GetActorForwardVector() * BulletRange;
+		FVector BulletEndLocation;// = WeaponMuzzle + GetActorForwardVector() * BulletRange;
+
+		ABotController* BotController = Cast<ABotController>(GetController());
+		if (BotController)
+		{
+			BulletEndLocation = BotController->GetSelectedTargetLocation();
+		}
+		else
+		{
+			BulletEndLocation = WeaponMuzzle + GetActorForwardVector() * BulletRange;
+		}
+
 		DrawDebugLine(World, WeaponMuzzle, BulletEndLocation, FColor::Blue, false, 15.f);
 		DrawDebugPoint(World, WeaponMuzzle, 10.f, FColor::Black, false, 15.f);
 		DrawDebugPoint(World, BulletEndLocation, 10.f, FColor::Red, false, 15.f);

@@ -27,6 +27,12 @@ public:
 
 	ABotController();
 
+	/*
+	 * Returns the world location of the selected target.
+	 * If we haven't selected a target it will return the forward vector
+	 */
+	FVector GetSelectedTargetLocation() const;
+
 protected:
 
 	UPROPERTY(EditDefaultsOnly)

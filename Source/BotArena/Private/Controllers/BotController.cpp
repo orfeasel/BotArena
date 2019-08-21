@@ -36,6 +36,25 @@ ABotController::ABotController()
 	
 }
 
+FVector ABotController::GetSelectedTargetLocation() const
+{
+	const UBlackboardComponent* BlackBoardComp = GetBlackboardComponent();
+	if (BlackBoardComp)
+	{
+		UObject* Target = BlackBoardComp->GetValueAsObject(BlackboardKey_SelectedTarget);
+
+		if (!Target) return FVector::ForwardVector;
+
+		AActor* SelectedTarget = Cast<AActor>(Target);
+		if (SelectedTarget)
+		{
+			return SelectedTarget->GetActorLocation();
+		}
+	}
+
+	return FVector::ForwardVector;
+}
+
 void ABotController::SelectTarget(const TArray<AActor*>& TargetList)
 {
 	ensure(GetBlackboardComponent());
