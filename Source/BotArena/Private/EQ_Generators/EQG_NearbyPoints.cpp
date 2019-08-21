@@ -26,8 +26,6 @@ void UEQG_NearbyPoints::GenerateItems(FEnvQueryInstance& QueryInstance) const
 
 	}
 
-	//int32 PointsGenerated = LocationCandidates.Num();
-
 	ProjectAndFilterNavPoints(LocationCandidates, QueryInstance);
 	StoreNavPoints(LocationCandidates, QueryInstance);
 }

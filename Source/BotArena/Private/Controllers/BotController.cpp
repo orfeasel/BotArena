@@ -14,6 +14,7 @@
 #include "Perception/AIPerceptionTypes.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "AICharacter.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 ABotController::ABotController()
@@ -73,11 +74,6 @@ void ABotController::OnPerceptionUpdated(const TArray<AActor*>& SensedActors)
 	GLog->Log("On Perception updated!");
 	SelectTarget(SensedActors);
 
-	/*GLog->Log("sensed actors list:");
-	for (int32 i = 0; i < SensedActors.Num(); i++)
-	{
-		GLog->Log(SensedActors[i]->GetName());
-	}*/
 }
 
 void ABotController::OnPossess(APawn* InPawn)
@@ -109,12 +105,18 @@ void ABotController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	UBlackboardComponent* BlackboardComp = GetBlackboardComponent();
-	if (!IsFollowingAPath() && BlackboardComp)
-	{	
-		//BlackboardComp->SetValueAsVector(BlackboardKey_MoveLocation, GetPawn()->GetActorLocation() + GetPawn()->GetActorForwardVector()*1250.f);
-		BlackboardComp->SetValueAsVector(BlackboardKey_MoveLocation, GetPawn()->GetActorLocation() + GetPawn()->GetActorRightVector()*-1250.f);
+	UBlackboardComponent* BlackBoardComp = GetBlackboardComponent();
+	
+	if (UObject* SelectedTarget = BlackBoardComp->GetValueAsObject(BlackboardKey_SelectedTarget))
+	{
+		AActor* PossesedActor = GetCharacter();
+		AActor* TargetToFace = Cast<AActor>(SelectedTarget);
+		if (PossesedActor && TargetToFace)
+		{
+			PossesedActor->SetActorRotation(UKismetMathLibrary::FindLookAtRotation(PossesedActor->GetActorLocation(), TargetToFace->GetActorLocation()));
+		}
 	}
+
 }
 
 //void ABotController::BeginPlay()
