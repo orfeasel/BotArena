@@ -5,6 +5,8 @@
 #include "Components/StaticMeshComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Controllers/BotController.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "MiscClasses/Projectile.h"
 
 bool AAICharacter::CanFireWeapon() const
 {
@@ -17,18 +19,54 @@ AAICharacter::AAICharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
 	WeaponSM = CreateDefaultSubobject<UStaticMeshComponent>(FName("WeaponSM"));
+	if (WeaponSM)
+	{
+		WeaponSM->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), FName("WeaponSocket"));
+	}
+	
+	WeaponFireFX = CreateDefaultSubobject<UParticleSystemComponent>(FName("FireWeaponFX"));
+	if (WeaponFireFX)
+	{
+		WeaponFireFX->SetAutoActivate(false);
+		WeaponFireFX->AttachToComponent(WeaponSM, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
+		WeaponFireFX->SetWorldLocation(WeaponSM->GetSocketLocation("BulletSocket"));
+		//WeaponFireFX->AttachToComponent(WeaponSM, FAttachmentTransformRules(EAttachmentRule::SnapToTarget,true), FName("BulletSocket"));
+	}
+	
+}
 
-	//FAttachmentTransformRules WeaponAttachmentRules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget,tr);
-	WeaponSM->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget,true),FName("WeaponSocket"));
-	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+float AAICharacter::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+
+	Health -= Damage;
+	//TODO:Play hit montage
+
+	if (!IsAlive())
+	{
+		GetMesh()->SetSimulatePhysics(true);
+		GetMesh()->SetCollisionProfileName(FName("Ragdoll"));
+		GetMesh()->SetCollisionResponseToAllChannels(ECR_Block);
+
+		if (GetController())
+		{
+			GetController()->UnPossess();
+		}
+		
+		GLog->Log("bot is dead activating ragdoll");
+	}
+
+	return Damage;
 }
 
 // Called when the game starts or when spawned
 void AAICharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	//WeaponFireFX->SetWorldLocation(WeaponSM->GetSocketLocation(FName("WeaponSocket")));
 	
 }
 
@@ -53,9 +91,28 @@ void AAICharacter::FireWeapon()
 			BulletEndLocation = WeaponMuzzle + GetActorForwardVector() * BulletRange;
 		}
 
-		DrawDebugLine(World, WeaponMuzzle, BulletEndLocation, FColor::Blue, false, 15.f);
-		DrawDebugPoint(World, WeaponMuzzle, 10.f, FColor::Black, false, 15.f);
-		DrawDebugPoint(World, BulletEndLocation, 10.f, FColor::Red, false, 15.f);
+		//if (WeaponFireFX)
+		//{
+		//	//WeaponFireFX->SetBeamSourcePoint(0, WeaponMuzzle, 0);
+		//	//WeaponFireFX->SetBeamTargetPoint(0, BulletEndLocation, 0);
+		//	/*WeaponFireFX->SetVectorParameter(FName("BeamSource"), WeaponMuzzle);
+		//	WeaponFireFX->SetVectorParameter(FName("BeamTarget"), BulletEndLocation);*/
+		//	/*WeaponFireFX->SetBeamEndPoint(0, BulletEndLocation);
+		//	WeaponFireFX->Activate(true);*/
+		//	WeaponFireFX->Activate();
+		//	GLog->Log("activated particle");
+		//}
+
+		if (ProjectileBP)
+		{
+			
+			AProjectile* SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBP, FTransform(WeaponMuzzle), FActorSpawnParameters());
+			SpawnedProjectile->AdjustVelocity(BulletEndLocation);
+		}
+
+		//DrawDebugLine(World, WeaponMuzzle, BulletEndLocation, FColor::Blue, false, 15.f);
+		//DrawDebugPoint(World, WeaponMuzzle, 10.f, FColor::Black, false, 15.f);
+		//DrawDebugPoint(World, BulletEndLocation, 10.f, FColor::Red, false, 15.f);
 
 		CurrentAmmo--;
 		LastFireWeaponTime = 0.f;

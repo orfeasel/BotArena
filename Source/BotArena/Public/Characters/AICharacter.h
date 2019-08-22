@@ -31,6 +31,8 @@ public:
 	// Sets default values for this character's properties
 	AAICharacter();
 
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -54,6 +56,12 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float BulletRange = 2000.f;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UParticleSystemComponent* WeaponFireFX;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AProjectile> ProjectileBP;
+
 	/* 
 	 * Delay between successful FireWeapon() calls to avoid firing multiple times in the same tick
 	 * Treat this as the weapon's "FireRate".
@@ -69,6 +77,8 @@ public:
 	 */
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "BotArena")
 	void AssignTeam(ETeam NewTeam);
+
+	FORCEINLINE bool IsAlive() const { return Health > 0; }
 
 	UFUNCTION(BlueprintCallable,Category="BotArena")
 	void FireWeapon();
