@@ -53,9 +53,13 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	FName BlackboardKey_SelectedTarget;
 
-	/* Will only select target if target is dead or last selected target was on the last tick of the interval */
+	/* Will only select target every X interval */
 	UPROPERTY(EditDefaultsOnly)
 	float SelectTargetInterval = 5.f;
+
+	/* How fast the bot rotates to face a new target */
+	UPROPERTY(EditAnywhere)
+	float SelectTargetRotationSpeed = 1.f;
 
 	UPROPERTY(VisibleAnywhere)
 	class UAIPerceptionComponent* PerceptionComp;

@@ -159,9 +159,11 @@ void ABotController::Tick(float DeltaTime)
 	{
 		AActor* PossesedActor = GetCharacter();
 		AActor* TargetToFace = Cast<AActor>(SelectedTarget);
+
 		if (PossesedActor && TargetToFace)
 		{
-			PossesedActor->SetActorRotation(UKismetMathLibrary::FindLookAtRotation(PossesedActor->GetActorLocation(), TargetToFace->GetActorLocation()));
+			FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(PossesedActor->GetActorLocation(), TargetToFace->GetActorLocation());
+			PossesedActor->SetActorRotation(FMath::RInterpTo(PossesedActor->GetActorRotation(), TargetRotation, DeltaTime, SelectTargetRotationSpeed));
 		}
 	}
 
