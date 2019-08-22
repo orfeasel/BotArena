@@ -38,6 +38,10 @@ public:
 	 */
 	FVector GetSelectedTargetLocation() const;
 
+	void SetMoveToLocation(const FVector& Location);
+
+	FORCEINLINE UBehaviorTree* GetCurrentTree() { return BTAsset; }
+
 protected:
 
 	UPROPERTY(EditDefaultsOnly)

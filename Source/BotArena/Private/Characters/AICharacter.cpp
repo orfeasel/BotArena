@@ -57,7 +57,7 @@ void AAICharacter::FireWeapon()
 		DrawDebugLine(World, WeaponMuzzle, BulletEndLocation, FColor::Blue, false, 15.f);
 		DrawDebugPoint(World, WeaponMuzzle, 10.f, FColor::Black, false, 15.f);
 		DrawDebugPoint(World, BulletEndLocation, 10.f, FColor::Red, false, 15.f);
-		GLog->Log("fired weapon!");
+		//GLog->Log("fired weapon!");
 	}
 
 }

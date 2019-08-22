@@ -55,6 +55,12 @@ FVector ABotController::GetSelectedTargetLocation() const
 	return FVector::ForwardVector;
 }
 
+void ABotController::SetMoveToLocation(const FVector& Location)
+{
+	ensure(GetBlackboardComponent());
+	GetBlackboardComponent()->SetValueAsVector(BlackboardKey_MoveLocation, Location);
+}
+
 void ABotController::SelectTarget(const TArray<AActor*>& TargetList)
 {
 	ensure(GetBlackboardComponent());
