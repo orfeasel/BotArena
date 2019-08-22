@@ -7,6 +7,7 @@
 #include "Controllers/BotController.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "MiscClasses/Projectile.h"
+#include "TimerManager.h"
 
 bool AAICharacter::CanFireWeapon() const
 {
@@ -55,6 +56,15 @@ float AAICharacter::TakeDamage(float Damage, struct FDamageEvent const& DamageEv
 		{
 			GetController()->UnPossess();
 		}
+
+		//Destroy the in-game actor after a few seconds
+		FTimerHandle DestroyBotTimer;
+		FTimerDelegate DestroyActorDelegate;
+		DestroyActorDelegate.BindLambda([&]()
+		{
+			Destroy();
+		});
+		GetWorld()->GetTimerManager().SetTimer(DestroyBotTimer, DestroyActorDelegate, DestroyActorDelay, false);
 		
 		GLog->Log("bot is dead activating ragdoll");
 	}

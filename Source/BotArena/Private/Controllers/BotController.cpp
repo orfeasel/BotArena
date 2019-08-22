@@ -79,11 +79,11 @@ void ABotController::SelectTarget(const TArray<AActor*>& TargetList)
 		//Choose a target
 		for (int32 TargetIndex = 0; TargetIndex < TargetList.Num(); TargetIndex++)
 		{
-			//Only choose a target from Bots
+			//Only choose a single target from the available Bots
 			AAICharacter* Bot = Cast<AAICharacter>(TargetList[TargetIndex]);
 			if (Bot)
 			{
-				if (ControlledCharacter->IsHostile(*Bot))
+				if (Bot->IsAlive() && ControlledCharacter->IsHostile(*Bot))
 				{
 					//We have a new closer target
 					if ((Bot->GetActorLocation() - CharacterLocation).Size() < ClosestDistance)

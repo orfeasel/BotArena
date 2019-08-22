@@ -10,7 +10,7 @@ void AProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* Oth
 	if (OtherActor)
 	{
 		AAICharacter* BotChar = Cast<AAICharacter>(OtherActor);
-		if (BotChar && !BotChar->IsPendingKill())
+		if (BotChar)
 		{
 			BotChar->TakeDamage(Damage, FDamageEvent(), BotChar->GetController(), this);
 			GLog->Log("bot took dmg");

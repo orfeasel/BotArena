@@ -62,6 +62,10 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AProjectile> ProjectileBP;
 
+	/* If the bot is dead destroy it after X seconds */
+	UPROPERTY(EditAnywhere)
+	float DestroyActorDelay = 5.f;
+
 	/* 
 	 * Delay between successful FireWeapon() calls to avoid firing multiple times in the same tick
 	 * Treat this as the weapon's "FireRate".
