@@ -19,6 +19,13 @@ class BOTARENA_API AAICharacter : public ACharacter
 {
 	GENERATED_BODY()
 	
+private:
+
+	/* Time since this character fired */
+	float LastFireWeaponTime;
+
+	/* True if the character can fire the weapon */
+	bool CanFireWeapon() const;
 
 public:
 	// Sets default values for this character's properties
@@ -31,17 +38,28 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* WeaponSM;
 
+	/* The team of the current bot */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	ETeam Team;
 
+	/* Current Health of this bot */
 	UPROPERTY(VisibleAnywhere)
 	float Health = 100.f;
 
+	/* Current Ammo of this bot */
 	UPROPERTY(VisibleAnywhere)
 	int32 CurrentAmmo = 30;
 
+	/* Max range for bullets to travel */
 	UPROPERTY(EditAnywhere)
 	float BulletRange = 2000.f;
+
+	/* 
+	 * Delay between successful FireWeapon() calls to avoid firing multiple times in the same tick
+	 * Treat this as the weapon's "FireRate".
+	 */
+	UPROPERTY(EditDefaultsOnly)
+	float FireDelay = 0.35f;
 
 public:	
 

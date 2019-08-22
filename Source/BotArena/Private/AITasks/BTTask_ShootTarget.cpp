@@ -13,45 +13,20 @@
 
 UBTTask_ShootTarget::UBTTask_ShootTarget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	bNotifyTick = true;
+	bNotifyTick = false;
 }
 
 EBTNodeResult::Type UBTTask_ShootTarget::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	FireTime = 0.f;
-	
 	AAICharacter* Bot = Cast<AAICharacter>(OwnerComp.GetAIOwner()->GetCharacter());
-	
 	if (Bot)
 	{
+		//Fire the weapon and start ticking the task so we can add some delay to avoid
+		//firing multiple times in the same tick event
 		Bot->FireWeapon();
-		//bDelayCompleted = false;
-		////FireTime = 0.f;
-		//if (bDelayCompleted)
-		//{
-		//	return EBTNodeResult::Succeeded;
-		//}
-		//FinishLatentTask(OwnerComp, EBTNodeResult::InProgress);
-		FinishLatentTask(OwnerComp, EBTNodeResult::InProgress);
-		return EBTNodeResult::InProgress;
+		return EBTNodeResult::Succeeded;
 		
 	}
-	FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 	return EBTNodeResult::Failed;
 
-}
-
-void UBTTask_ShootTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
-{
-	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
-	//GLog->Log("tick task");
-	FireTime += DeltaSeconds;
-
-	if (FireTime >= FireWeaponDelay)
-	{
-		//bDelayCompleted = true;
-		FireTime = 0.f;
-		//GLog->Log("finishing latent task");
-		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-	}
 }

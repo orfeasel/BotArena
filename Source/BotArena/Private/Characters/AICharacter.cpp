@@ -6,6 +6,11 @@
 #include "DrawDebugHelpers.h"
 #include "Controllers/BotController.h"
 
+bool AAICharacter::CanFireWeapon() const
+{
+	return (Health>0) && (CurrentAmmo > 0) && (LastFireWeaponTime >= FireDelay);
+}
+
 // Sets default values
 AAICharacter::AAICharacter()
 {
@@ -27,19 +32,13 @@ void AAICharacter::BeginPlay()
 	
 }
 
-//void AAICharacter::AssignTeam_Implementation(ETeam NewTeam)
-//{
-//	Team = NewTeam;
-//}
-
 void AAICharacter::FireWeapon()
 {
 	ensure(WeaponSM);
 
-	CurrentAmmo--;
-
+	
 	const UWorld* World = GetWorld();
-	if (World)
+	if (World && CanFireWeapon())
 	{
 		FVector WeaponMuzzle = WeaponSM->GetSocketLocation(FName("BulletSocket"));
 		FVector BulletEndLocation;// = WeaponMuzzle + GetActorForwardVector() * BulletRange;
@@ -57,7 +56,10 @@ void AAICharacter::FireWeapon()
 		DrawDebugLine(World, WeaponMuzzle, BulletEndLocation, FColor::Blue, false, 15.f);
 		DrawDebugPoint(World, WeaponMuzzle, 10.f, FColor::Black, false, 15.f);
 		DrawDebugPoint(World, BulletEndLocation, 10.f, FColor::Red, false, 15.f);
-		//GLog->Log("fired weapon!");
+
+		CurrentAmmo--;
+		LastFireWeaponTime = 0.f;
+
 	}
 
 }
@@ -66,6 +68,8 @@ void AAICharacter::FireWeapon()
 void AAICharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	LastFireWeaponTime += DeltaTime;
 
 }
 
