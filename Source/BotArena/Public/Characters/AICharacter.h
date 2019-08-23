@@ -91,6 +91,10 @@ public:
 
 	FORCEINLINE bool IsHostile(const AAICharacter& OtherCharacter) { return !IsFriendly(OtherCharacter); }
 
+	FORCEINLINE ETeam GetTeam() const { return Team; }
+
+	FORCEINLINE bool SameTeam(const AAICharacter& OtherCharacterr) { return Team == OtherCharacterr.Team; }
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
