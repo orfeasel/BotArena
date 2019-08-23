@@ -8,6 +8,7 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "MiscClasses/Projectile.h"
 #include "TimerManager.h"
+#include "Components/CapsuleComponent.h"
 
 bool AAICharacter::CanFireWeapon() const
 {
@@ -51,6 +52,8 @@ float AAICharacter::TakeDamage(float Damage, struct FDamageEvent const& DamageEv
 		GetMesh()->SetSimulatePhysics(true);
 		GetMesh()->SetCollisionProfileName(FName("Ragdoll"));
 		GetMesh()->SetCollisionResponseToAllChannels(ECR_Block);
+
+		GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 
 		if (GetController())
 		{
