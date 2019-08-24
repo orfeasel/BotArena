@@ -15,7 +15,7 @@
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "AICharacter.h"
 #include "Kismet/KismetMathLibrary.h"
-
+#include "Components/BotPathFollowingComponent.h"
 
 ABotController::ABotController()
 {
@@ -33,7 +33,9 @@ ABotController::ABotController()
 			SetPerceptionComponent(*PerceptionComp);
 		}
 	}
-	
+
+	//Initialise our custom path following comp. In beginplay make it as the default comp for our character's path following comp
+	BotPathFollowingComp = CreateDefaultSubobject<UBotPathFollowingComponent>(FName("BotPathFollowingComponent"));
 }
 
 FVector ABotController::GetSelectedTargetLocation() const
@@ -85,7 +87,7 @@ void ABotController::SelectTarget(const TArray<AActor*>& TargetList)
 			{
 				if (Bot->IsAlive() && ControlledCharacter->IsHostile(*Bot))
 				{
-					//We have a new closer target
+					//We have a new target
 					if ((Bot->GetActorLocation() - CharacterLocation).Size() < ClosestDistance)
 					{
 						ClosestDistance = (Bot->GetActorLocation() - CharacterLocation).Size();
@@ -169,14 +171,13 @@ void ABotController::Tick(float DeltaTime)
 
 }
 
-//void ABotController::BeginPlay()
-//{
-//	Super::BeginPlay();
-//
-//	if (!BTAsset)
-//	{
-//		GLog->Log("invalid bt"); //warning here
-//		return;
-//	}
-//
-//}
+void ABotController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (BotPathFollowingComp)
+	{
+		//For some reason this works fine inside begin play and not in the constructor.
+		SetPathFollowingComponent(BotPathFollowingComp);
+	}
+}

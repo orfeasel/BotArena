@@ -67,11 +67,14 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class UAIPerceptionStimuliSourceComponent* StimuliSourceComp;
 
+	UPROPERTY(VisibleAnywhere)
+	class UBotPathFollowingComponent* BotPathFollowingComp;
+
 	virtual void OnPossess(APawn* InPawn) override;
 
 	virtual void Tick(float DeltaTime) override;
 
-
+	virtual void BeginPlay() override;
 
 	
 	

@@ -9,6 +9,8 @@
 #include "MiscClasses/Projectile.h"
 #include "TimerManager.h"
 #include "Components/CapsuleComponent.h"
+#include "Environment/NavArea_Crouch.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 bool AAICharacter::CanFireWeapon() const
 {
@@ -20,6 +22,14 @@ AAICharacter::AAICharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	//Init properties
+	Health = 100.f;
+	CurrentAmmo = 30;
+	BulletRange = 2000.f;
+	MeshCrouchAdjustLocation = FVector(0, 0, -70);
+	DestroyActorDelay = 5.f;
+	FireDelay = 0.35f;
 
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
@@ -140,6 +150,15 @@ void AAICharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	LastFireWeaponTime += DeltaTime;
+
+	if (GetCharacterMovement())
+	{
+		//Adjust the mesh height in order to avoid having half of the mesh under the ground.
+		if (GetCharacterMovement()->IsCrouching())
+		{
+			GetMesh()->SetRelativeLocation(FVector(0, 0, -70.f), true, nullptr, ETeleportType::TeleportPhysics);
+		}
+	}
 
 }
 

@@ -33,7 +33,9 @@ public:
 
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+
 protected:
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -46,15 +48,15 @@ protected:
 
 	/* Current Health of this bot */
 	UPROPERTY(VisibleAnywhere)
-	float Health = 100.f;
+	float Health;
 
 	/* Current Ammo of this bot */
 	UPROPERTY(VisibleAnywhere)
-	int32 CurrentAmmo = 30;
+	int32 CurrentAmmo;
 
 	/* Max range for bullets to travel */
 	UPROPERTY(EditAnywhere)
-	float BulletRange = 2000.f;
+	float BulletRange;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UParticleSystemComponent* WeaponFireFX;
@@ -62,16 +64,20 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AProjectile> ProjectileBP;
 
+	/* By default while crouching the bot's mesh is falling below the ground so adjust its location to avoid this effect */
+	UPROPERTY(EditAnywhere)
+	FVector MeshCrouchAdjustLocation = FVector(0, 0, -70);
+
 	/* If the bot is dead destroy it after X seconds */
 	UPROPERTY(EditAnywhere)
-	float DestroyActorDelay = 5.f;
+	float DestroyActorDelay;
 
 	/* 
 	 * Delay between successful FireWeapon() calls to avoid firing multiple times in the same tick
 	 * Treat this as the weapon's "FireRate".
 	 */
 	UPROPERTY(EditDefaultsOnly)
-	float FireDelay = 0.35f;
+	float FireDelay;
 
 public:	
 
