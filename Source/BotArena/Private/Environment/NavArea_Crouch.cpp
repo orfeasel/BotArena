@@ -5,6 +5,7 @@
 
 UNavArea_Crouch::UNavArea_Crouch()
 {
-	GLog->Log("area nav helper was set to crouch");
+	DefaultCost = 0.f;
 	FNavAreaHelper::Set(AreaFlags, ENavAreaFlag::Crouch);
+	DrawColor = FColor::Blue;
 }
