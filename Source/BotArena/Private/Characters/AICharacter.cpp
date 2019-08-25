@@ -62,10 +62,10 @@ float AAICharacter::TakeDamage(float Damage, struct FDamageEvent const& DamageEv
 	//Should we retreat?
 	if (Health <= MaxHealth * RetreatHealthPercentage)
 	{
-		ABotController* Controller = Cast<ABotController>(GetController());
-		if (Controller)
+		ABotController* BotController = Cast<ABotController>(GetController());
+		if (BotController)
 		{
-			Controller->InitiateRetreat();
+			BotController->InitiateRetreat();
 		}
 	}
 

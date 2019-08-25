@@ -13,7 +13,7 @@ void AProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* Oth
 		if (BotChar)
 		{
 			BotChar->TakeDamage(Damage, FDamageEvent(), BotChar->GetController(), this);
-			GLog->Log("bot took dmg");
+			//GLog->Log("bot took dmg");
 			
 		}
 	}
@@ -30,7 +30,7 @@ AProjectile::AProjectile()
 	
 	if (ProjectileSM)
 	{
-		ProjectileSM->AttachToComponent(GetRootComponent(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true));
+		SetRootComponent(ProjectileSM);
 	}
 
 	ProjectileMovementComp = CreateDefaultSubobject<UProjectileMovementComponent>(FName("ProjectileMovementComp"));

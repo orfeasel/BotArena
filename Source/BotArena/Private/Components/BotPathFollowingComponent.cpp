@@ -18,7 +18,7 @@ void UBotPathFollowingComponent::SetMoveSegment(int32 SegmentStartIndex)
 			CharacterMovementComp->bWantsToCrouch = true;
 			CharacterMovementComp->Crouch();
 			
-			GLog->Log("I should crouch!");
+			//GLog->Log("I should crouch!");
 		}
 		else
 		{
@@ -31,5 +31,5 @@ void UBotPathFollowingComponent::SetMovementComponent(UNavMovementComponent* Mov
 {
 	Super::SetMovementComponent(MoveComp);
 	CharacterMovementComp = Cast<UCharacterMovementComponent>(MoveComp);
-	GLog->Log("set move comp called");
+	//GLog->Log("set move comp called");
 }

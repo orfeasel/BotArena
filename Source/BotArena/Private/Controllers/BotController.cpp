@@ -100,12 +100,12 @@ void ABotController::SelectTarget(const TArray<AActor*>& TargetList)
 						ClosestDistance = (Bot->GetActorLocation() - CharacterLocation).Size();
 						SelectedTarget = Bot;
 						TimeSinceTargetSelection = 0.f;
-						GLog->Log("switched target!");
+						//GLog->Log("switched target!");
 					}
 				}
 			}
 		}
-		GLog->Log("selected target from sensed actors!");
+		//GLog->Log("selected target from sensed actors!");
 		GetBlackboardComponent()->SetValueAsObject(BlackboardKey_SelectedTarget, SelectedTarget);
 	}
 
