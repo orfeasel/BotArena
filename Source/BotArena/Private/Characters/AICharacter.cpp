@@ -17,6 +17,18 @@ bool AAICharacter::CanFireWeapon() const
 	return (Health>0) && (CurrentAmmo > 0) && (LastFireWeaponTime >= FireDelay);
 }
 
+void AAICharacter::DeactivateFireWeaponParticle()
+{
+	if (WeaponFireFX)
+	{
+		//WeaponFireFX->Deactivate();
+		//WeaponFireFX->SetBeamEndPoint(0, FVector::ZeroVector);
+		WeaponFireFX->SetBeamEndPoint(0, WeaponFireFX->GetComponentLocation());
+		//WeaponFireFX->GetBeamSourcePoint()
+		WeaponFireFX->DeactivaateNextTick();
+	}
+}
+
 // Sets default values
 AAICharacter::AAICharacter()
 {
@@ -32,6 +44,7 @@ AAICharacter::AAICharacter()
 	DestroyActorDelay = 5.f;
 	FireDelay = 0.35f;
 	RetreatHealthPercentage = 0.2f;
+	DeactivateParticleDelay = 0.2f;
 
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
@@ -47,7 +60,6 @@ AAICharacter::AAICharacter()
 		WeaponFireFX->SetAutoActivate(false);
 		WeaponFireFX->AttachToComponent(WeaponSM, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
 		WeaponFireFX->SetWorldLocation(WeaponSM->GetSocketLocation("BulletSocket"));
-		//WeaponFireFX->AttachToComponent(WeaponSM, FAttachmentTransformRules(EAttachmentRule::SnapToTarget,true), FName("BulletSocket"));
 	}
 	
 }
@@ -117,14 +129,15 @@ void AAICharacter::FireWeapon()
 {
 	ensure(WeaponSM);
 
-	
 	const UWorld* World = GetWorld();
-	if (World && CanFireWeapon())
+
+	ABotController* BotController = Cast<ABotController>(GetController());
+
+	if (World && BotController && BotController->GetSelectedTarget() && CanFireWeapon())
 	{
 		FVector WeaponMuzzle = WeaponSM->GetSocketLocation(FName("BulletSocket"));
 		FVector BulletEndLocation;// = WeaponMuzzle + GetActorForwardVector() * BulletRange;
 
-		ABotController* BotController = Cast<ABotController>(GetController());
 		if (BotController)
 		{
 			BulletEndLocation = BotController->GetSelectedTargetLocation();
@@ -134,23 +147,16 @@ void AAICharacter::FireWeapon()
 			BulletEndLocation = WeaponMuzzle + GetActorForwardVector() * BulletRange;
 		}
 
-		//if (WeaponFireFX)
-		//{
-		//	//WeaponFireFX->SetBeamSourcePoint(0, WeaponMuzzle, 0);
-		//	//WeaponFireFX->SetBeamTargetPoint(0, BulletEndLocation, 0);
-		//	/*WeaponFireFX->SetVectorParameter(FName("BeamSource"), WeaponMuzzle);
-		//	WeaponFireFX->SetVectorParameter(FName("BeamTarget"), BulletEndLocation);*/
-		//	/*WeaponFireFX->SetBeamEndPoint(0, BulletEndLocation);
-		//	WeaponFireFX->Activate(true);*/
-		//	WeaponFireFX->Activate();
-		//	GLog->Log("activated particle");
-		//}
 
-		if (ProjectileBP)
+		if (ProjectileBP && WeaponFireFX)
 		{
 			
 			AProjectile* SpawnedProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBP, FTransform(WeaponMuzzle), FActorSpawnParameters());
 			SpawnedProjectile->AdjustVelocity(BulletEndLocation);
+			
+			//Activate the particle and adjust its end point
+			WeaponFireFX->Activate();
+			WeaponFireFX->SetBeamEndPoint(0, BulletEndLocation);
 		}
 
 		//DrawDebugLine(World, WeaponMuzzle, BulletEndLocation, FColor::Blue, false, 15.f);
@@ -170,6 +176,12 @@ void AAICharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	LastFireWeaponTime += DeltaTime;
+
+	if (LastFireWeaponTime >= DeactivateParticleDelay)
+	{
+		GLog->Log("deactivating particle");
+		DeactivateFireWeaponParticle();
+	}
 
 	if (GetCharacterMovement())
 	{

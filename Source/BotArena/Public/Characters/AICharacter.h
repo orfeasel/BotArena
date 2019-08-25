@@ -27,6 +27,8 @@ private:
 	/* True if the character can fire the weapon */
 	bool CanFireWeapon() const;
 
+	void DeactivateFireWeaponParticle();
+
 public:
 	// Sets default values for this character's properties
 	AAICharacter();
@@ -95,6 +97,13 @@ protected:
 	 */
 	UPROPERTY(EditDefaultsOnly)
 	float FireDelay;
+
+	/*
+	 * Sad but true, I spent so much time configuring this particle that I just ended up
+	 * deactivating after X seconds from the moment the bot fired to make the effect somewhat eye - friendly
+	 */
+	UPROPERTY(EditDefaultsOnly)
+	float DeactivateParticleDelay;
 
 public:	
 
