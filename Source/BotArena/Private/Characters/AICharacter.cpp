@@ -24,12 +24,14 @@ AAICharacter::AAICharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	//Init properties
+	MaxHealth = 100.f;
 	Health = 100.f;
 	CurrentAmmo = 30;
 	BulletRange = 2000.f;
 	MeshCrouchAdjustLocation = FVector(0, 0, -70);
 	DestroyActorDelay = 5.f;
 	FireDelay = 0.35f;
+	RetreatHealthPercentage = 0.2f;
 
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
@@ -57,6 +59,17 @@ float AAICharacter::TakeDamage(float Damage, struct FDamageEvent const& DamageEv
 	Health -= Damage;
 	//TODO:Play hit montage
 
+	//Should we retreat?
+	if (Health <= MaxHealth * RetreatHealthPercentage)
+	{
+		ABotController* Controller = Cast<ABotController>(GetController());
+		if (Controller)
+		{
+			Controller->InitiateRetreat();
+		}
+	}
+
+	//If true the bot is dead so enable ragdoll physics and unposses to stop all AI logic
 	if (!IsAlive())
 	{
 		GetMesh()->SetSimulatePhysics(true);
@@ -79,7 +92,7 @@ float AAICharacter::TakeDamage(float Damage, struct FDamageEvent const& DamageEv
 		});
 		GetWorld()->GetTimerManager().SetTimer(DestroyBotTimer, DestroyActorDelegate, DestroyActorDelay, false);
 		
-		GLog->Log("bot is dead activating ragdoll");
+		//GLog->Log("bot is dead activating ragdoll");
 	}
 
 	return Damage;
@@ -89,7 +102,7 @@ float AAICharacter::TakeDamage(float Damage, struct FDamageEvent const& DamageEv
 void AAICharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	//WeaponFireFX->SetWorldLocation(WeaponSM->GetSocketLocation(FName("WeaponSocket")));
+	Health = MaxHealth;
 	
 }
 
@@ -167,5 +180,12 @@ void AAICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AAICharacter::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+
+	Health = MaxHealth;
 }
 

@@ -23,8 +23,6 @@ private:
 	UFUNCTION()
 	void OnPerceptionUpdated(const TArray<AActor*>& SensedActors);
 
-	AActor* GetSelectedTarget() const;
-
 	/* Time in seconds in which the target selection occured */
 	float TimeSinceTargetSelection;
 
@@ -42,6 +40,10 @@ public:
 
 	FORCEINLINE UBehaviorTree* GetCurrentTree() { return BTAsset; }
 
+	FORCEINLINE AActor* GetSelectedTarget() const;
+
+	void InitiateRetreat();
+
 protected:
 
 	UPROPERTY(EditDefaultsOnly)
@@ -52,6 +54,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	FName BlackboardKey_SelectedTarget;
+
+	UPROPERTY(VisibleAnywhere)
+	FName BlackboardKey_ShouldRetreat;
 
 	/* Will only select target every X interval */
 	UPROPERTY(EditDefaultsOnly)

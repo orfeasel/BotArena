@@ -22,6 +22,7 @@ ABotController::ABotController()
 	//Keys init
 	BlackboardKey_MoveLocation = FName("MoveLocation");
 	BlackboardKey_SelectedTarget = FName("SelectedTarget");
+	BlackboardKey_ShouldRetreat = FName("ShouldRetreat");
 
 	//Create the AI perception component
 	if (!GetPerceptionComponent())
@@ -61,6 +62,12 @@ void ABotController::SetMoveToLocation(const FVector& Location)
 {
 	ensure(GetBlackboardComponent());
 	GetBlackboardComponent()->SetValueAsVector(BlackboardKey_MoveLocation, Location);
+}
+
+void ABotController::InitiateRetreat()
+{
+	ensure(GetBlackboardComponent());
+	GetBlackboardComponent()->SetValueAsBool(BlackboardKey_ShouldRetreat, true);
 }
 
 void ABotController::SelectTarget(const TArray<AActor*>& TargetList)

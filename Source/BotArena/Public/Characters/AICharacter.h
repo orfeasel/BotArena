@@ -50,6 +50,10 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	float Health;
 
+	/* Max health of bots */
+	UPROPERTY(EditDefaultsOnly)
+	float MaxHealth;
+
 	/* Current Ammo of this bot */
 	UPROPERTY(VisibleAnywhere)
 	int32 CurrentAmmo;
@@ -71,6 +75,13 @@ protected:
 	/* If the bot is dead destroy it after X seconds */
 	UPROPERTY(EditAnywhere)
 	float DestroyActorDelay;
+
+	/* 
+	 * The health value that will trigger the retreat behavior.
+	 * A value of 0.2 means that the bot will treat when its health is <= MaxHealth * RetreatHealthPercentage
+	 */
+	UPROPERTY(EditAnywhere,config,meta=(ClampMin="0.0", ClampMax="1.0"))
+	float RetreatHealthPercentage;
 
 	/* 
 	 * Delay between successful FireWeapon() calls to avoid firing multiple times in the same tick
@@ -106,5 +117,7 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual void OnConstruction(const FTransform& Transform) override;
 
 };
