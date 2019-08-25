@@ -5,7 +5,7 @@
 
 UNavArea_Crouch::UNavArea_Crouch()
 {
-	DefaultCost = 0.f;
+	//DefaultCost = 0.f;
 	FNavAreaHelper::Set(AreaFlags, ENavAreaFlag::Crouch);
 	DrawColor = FColor::Blue;
 }

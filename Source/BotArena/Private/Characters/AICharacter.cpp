@@ -72,6 +72,13 @@ float AAICharacter::TakeDamage(float Damage, struct FDamageEvent const& DamageEv
 	//If true the bot is dead so enable ragdoll physics and unposses to stop all AI logic
 	if (!IsAlive())
 	{
+		//If the bot was crouching while he died we need to uncrouch first otherwise we're going to see
+		//"funny" ragdoll effects
+		if (GetCharacterMovement() && GetCharacterMovement()->IsCrouching())
+		{
+			GetCharacterMovement()->UnCrouch();
+		}
+
 		GetMesh()->SetSimulatePhysics(true);
 		GetMesh()->SetCollisionProfileName(FName("Ragdoll"));
 		GetMesh()->SetCollisionResponseToAllChannels(ECR_Block);
