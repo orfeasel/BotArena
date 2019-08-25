@@ -23,6 +23,7 @@ ABotController::ABotController()
 	BlackboardKey_MoveLocation = FName("MoveLocation");
 	BlackboardKey_SelectedTarget = FName("SelectedTarget");
 	BlackboardKey_ShouldRetreat = FName("ShouldRetreat");
+	BlackboardKey_CollectAmmo = FName("CollectAmmo");
 
 	//Create the AI perception component
 	if (!GetPerceptionComponent())
@@ -68,6 +69,12 @@ void ABotController::InitiateRetreat()
 {
 	ensure(GetBlackboardComponent());
 	GetBlackboardComponent()->SetValueAsBool(BlackboardKey_ShouldRetreat, true);
+}
+
+void ABotController::SetCollectAmmoStatus(const bool& NewStatus)
+{
+	ensure(GetBlackboardComponent());
+	GetBlackboardComponent()->SetValueAsBool(BlackboardKey_CollectAmmo, NewStatus);
 }
 
 void ABotController::SelectTarget(const TArray<AActor*>& TargetList)

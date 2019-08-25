@@ -44,6 +44,8 @@ public:
 
 	void InitiateRetreat();
 
+	void SetCollectAmmoStatus(const bool& NewStatus);
+
 protected:
 
 	UPROPERTY(EditDefaultsOnly)
@@ -57,6 +59,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	FName BlackboardKey_ShouldRetreat;
+
+	UPROPERTY(VisibleAnywhere)
+	FName BlackboardKey_CollectAmmo;
 
 	/* Will only select target every X interval */
 	UPROPERTY(EditDefaultsOnly)

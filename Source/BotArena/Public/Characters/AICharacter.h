@@ -33,6 +33,12 @@ public:
 
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+	FORCEINLINE void AddAmmo(int32 Ammo) { CurrentAmmo += Ammo; }
+
+	FORCEINLINE int32 GetCurrentAmmo() const { return CurrentAmmo; }
+
+	/* Probably shouldn't hardcode this */
+	FORCEINLINE bool LowOnAmmo() const { return CurrentAmmo < 10; }
 
 protected:
 
@@ -55,7 +61,7 @@ protected:
 	float MaxHealth;
 
 	/* Current Ammo of this bot */
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 CurrentAmmo;
 
 	/* Max range for bullets to travel */
