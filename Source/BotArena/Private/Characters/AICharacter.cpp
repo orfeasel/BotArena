@@ -49,10 +49,6 @@ AAICharacter::AAICharacter()
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
 	WeaponSM = CreateDefaultSubobject<UStaticMeshComponent>(FName("WeaponSM"));
-	if (WeaponSM)
-	{
-		WeaponSM->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), FName("WeaponSocket"));
-	}
 	
 	WeaponFireFX = CreateDefaultSubobject<UParticleSystemComponent>(FName("FireWeaponFX"));
 	if (WeaponFireFX)
@@ -122,6 +118,11 @@ void AAICharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	Health = MaxHealth;
+
+	if (WeaponSM)
+	{
+		WeaponSM->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), FName("WeaponSocket"));
+	}
 }
 
 void AAICharacter::FireWeapon()
