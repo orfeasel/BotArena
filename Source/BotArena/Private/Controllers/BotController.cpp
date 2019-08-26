@@ -178,16 +178,22 @@ void ABotController::Tick(float DeltaTime)
 
 	TimeSinceTargetSelection += DeltaTime;
 	
-	if (UObject* SelectedTarget = BlackBoardComp->GetValueAsObject(BlackboardKey_SelectedTarget))
+	if (BlackBoardComp)
 	{
-		AActor* PossesedActor = GetCharacter();
-		AActor* TargetToFace = Cast<AActor>(SelectedTarget);
+		UObject* SelectedTarget = BlackBoardComp->GetValueAsObject(BlackboardKey_SelectedTarget);
 
-		if (PossesedActor && TargetToFace)
+		if (SelectedTarget)
 		{
-			FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(PossesedActor->GetActorLocation(), TargetToFace->GetActorLocation());
-			PossesedActor->SetActorRotation(FMath::RInterpTo(PossesedActor->GetActorRotation(), TargetRotation, DeltaTime, SelectTargetRotationSpeed));
+			AActor* PossesedActor = GetCharacter();
+			AActor* TargetToFace = Cast<AActor>(SelectedTarget);
+
+			if (PossesedActor && TargetToFace)
+			{
+				FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(PossesedActor->GetActorLocation(), TargetToFace->GetActorLocation());
+				PossesedActor->SetActorRotation(FMath::RInterpTo(PossesedActor->GetActorRotation(), TargetRotation, DeltaTime, SelectTargetRotationSpeed));
+			}
 		}
+
 	}
 
 }
@@ -201,4 +207,11 @@ void ABotController::BeginPlay()
 		//For some reason this works fine inside begin play and not in the constructor.
 		SetPathFollowingComponent(BotPathFollowingComp);
 	}
+}
+
+void ABotController::OnUnPossess()
+{
+	Super::OnUnPossess();
+
+	Destroy();
 }
