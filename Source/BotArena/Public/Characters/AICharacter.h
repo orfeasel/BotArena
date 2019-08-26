@@ -21,6 +21,8 @@ class BOTARENA_API AAICharacter : public ACharacter
 	
 private:
 
+	bool CanSeeSelectedTarget() const;
+
 	/* Time since this character fired */
 	float LastFireWeaponTime;
 
@@ -65,10 +67,6 @@ protected:
 	/* Current Ammo of this bot */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 CurrentAmmo;
-
-	/* Max range for bullets to travel */
-	UPROPERTY(EditAnywhere)
-	float BulletRange;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UParticleSystemComponent* WeaponFireFX;
@@ -119,13 +117,13 @@ public:
 	UFUNCTION(BlueprintCallable,Category="BotArena")
 	void FireWeapon();
 
-	FORCEINLINE bool IsFriendly(const AAICharacter& OtherCharacter) { return Team == OtherCharacter.Team; }
+	FORCEINLINE bool IsFriendly(const AAICharacter& OtherCharacter) const { return Team == OtherCharacter.Team; }
 
-	FORCEINLINE bool IsHostile(const AAICharacter& OtherCharacter) { return !IsFriendly(OtherCharacter); }
+	FORCEINLINE bool IsHostile(const AAICharacter& OtherCharacter) const { return !IsFriendly(OtherCharacter); }
 
 	FORCEINLINE ETeam GetTeam() const { return Team; }
 
-	FORCEINLINE bool SameTeam(const AAICharacter& OtherCharacterr) { return Team == OtherCharacterr.Team; }
+	FORCEINLINE bool SameTeam(const AAICharacter& OtherCharacterr) const { return Team == OtherCharacterr.Team; }
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -12,6 +12,35 @@
 #include "Environment/NavArea_Crouch.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+bool AAICharacter::CanSeeSelectedTarget() const
+{
+	//Perform a line trace to check if the target is currently LOSing the bot
+	//We don't want to fire at wall and get blamed for wallhack :(
+	ABotController* BotController = Cast<ABotController>(GetController());
+	if (BotController && BotController->GetSelectedTarget())
+	{
+		FVector TargetLocation = BotController->GetSelectedTargetLocation();
+
+		FCollisionObjectQueryParams CollisionObjectQueryParams = FCollisionObjectQueryParams(ECC_WorldDynamic);
+		CollisionObjectQueryParams.AddObjectTypesToQuery(ECC_WorldStatic);
+		CollisionObjectQueryParams.AddObjectTypesToQuery(ECC_Pawn);
+
+		FHitResult HitResult;
+		FCollisionQueryParams CollisionQueryParams = FCollisionQueryParams(FName("BotLineTrace"));
+		CollisionQueryParams.AddIgnoredActor(this);
+
+		if (GetWorld()->LineTraceSingleByObjectType(HitResult, GetActorLocation(), TargetLocation, CollisionObjectQueryParams,CollisionQueryParams))
+		{
+			AAICharacter* Character = Cast<AAICharacter>(HitResult.GetActor());
+			if (Character && IsHostile(*Character))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 bool AAICharacter::CanFireWeapon() const
 {
 	return (Health>0) && (CurrentAmmo > 0) && (LastFireWeaponTime >= FireDelay);
@@ -39,7 +68,6 @@ AAICharacter::AAICharacter()
 	MaxHealth = 100.f;
 	Health = 100.f;
 	CurrentAmmo = 30;
-	BulletRange = 2000.f;
 	MeshCrouchAdjustLocation = FVector(0, 0, -70);
 	DestroyActorDelay = 5.f;
 	FireDelay = 0.35f;
@@ -133,21 +161,12 @@ void AAICharacter::FireWeapon()
 
 	ABotController* BotController = Cast<ABotController>(GetController());
 
-	if (World && BotController && BotController->GetSelectedTarget() && CanFireWeapon())
+	if (World && BotController && BotController->GetSelectedTarget() && CanFireWeapon()
+		&& CanSeeSelectedTarget())
 	{
 		FVector WeaponMuzzle = WeaponSM->GetSocketLocation(FName("BulletSocket"));
-		FVector BulletEndLocation;// = WeaponMuzzle + GetActorForwardVector() * BulletRange;
-
-		if (BotController)
-		{
-			BulletEndLocation = BotController->GetSelectedTargetLocation();
-		}
-		else
-		{
-			BulletEndLocation = WeaponMuzzle + GetActorForwardVector() * BulletRange;
-		}
-
-
+		FVector BulletEndLocation = BotController->GetSelectedTargetLocation();
+		
 		if (ProjectileBP && WeaponFireFX)
 		{
 			
