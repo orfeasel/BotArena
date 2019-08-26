@@ -122,7 +122,6 @@ void AAICharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	Health = MaxHealth;
-	
 }
 
 void AAICharacter::FireWeapon()
@@ -165,7 +164,6 @@ void AAICharacter::FireWeapon()
 
 		CurrentAmmo--;
 		LastFireWeaponTime = 0.f;
-
 	}
 
 }
@@ -179,7 +177,6 @@ void AAICharacter::Tick(float DeltaTime)
 
 	if (LastFireWeaponTime >= DeactivateParticleDelay)
 	{
-		GLog->Log("deactivating particle");
 		DeactivateFireWeaponParticle();
 	}
 
