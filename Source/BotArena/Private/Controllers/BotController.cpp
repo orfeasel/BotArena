@@ -162,7 +162,7 @@ void ABotController::OnPossess(APawn* InPawn)
 		UAISenseConfig_Sight* SightConfig = Cast<UAISenseConfig_Sight>(GetPerceptionComponent()->GetSenseConfig(UAISense::GetSenseID<UAISense_Sight>()));
 		if (SightConfig) 
 		{
-			GLog->Log("valid sight cfg");
+			//GLog->Log("valid sight cfg");
 			SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 			SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
 			SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
