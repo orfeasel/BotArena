@@ -20,8 +20,8 @@ void UBTService_CheckForAmmo::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 			//GLog->Log("setting low on ammo");
 			if (Bot->LowOnAmmo())
 			{
-				GLog->Log("I need ammo: " + Bot->GetName());
-				GLog->Log("Current ammo count: " + FString::FromInt(Bot->GetCurrentAmmo()));
+				//GLog->Log("I need ammo: " + Bot->GetName());
+				//GLog->Log("Current ammo count: " + FString::FromInt(Bot->GetCurrentAmmo()));
 			}
 			BotCon->SetCollectAmmoStatus(Bot->LowOnAmmo());
 			/*if (BotCon)

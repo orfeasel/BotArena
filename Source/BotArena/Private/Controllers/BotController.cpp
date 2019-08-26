@@ -16,7 +16,7 @@
 #include "AICharacter.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/BotPathFollowingComponent.h"
-
+#include "MiscClasses/AmmoBox.h"
 ABotController::ABotController()
 {
 	//Keys init
@@ -24,6 +24,7 @@ ABotController::ABotController()
 	BlackboardKey_SelectedTarget = FName("SelectedTarget");
 	BlackboardKey_ShouldRetreat = FName("ShouldRetreat");
 	BlackboardKey_CollectAmmo = FName("CollectAmmo");
+	BlackboardKey_AmmoBox = FName("AmmoBox");
 
 	//Create the AI perception component
 	if (!GetPerceptionComponent())
@@ -63,6 +64,12 @@ void ABotController::SetMoveToLocation(const FVector& Location)
 {
 	ensure(GetBlackboardComponent());
 	GetBlackboardComponent()->SetValueAsVector(BlackboardKey_MoveLocation, Location);
+}
+
+void ABotController::SetAmmoBox(AAmmoBox* AmmoBox)
+{
+	ensure(GetBlackboardComponent());
+	GetBlackboardComponent()->SetValueAsObject(BlackboardKey_AmmoBox, AmmoBox);
 }
 
 void ABotController::InitiateRetreat()

@@ -8,7 +8,7 @@
 #include "Engine/World.h"
 #include "MiscClasses/AmmoBox.h"
 #include "Controllers/BotController.h"
-//#include "DrawDebugHelpers.h"
+#include "DrawDebugHelpers.h"
 
 EBTNodeResult::Type UBTTask_CollectAmmo::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
@@ -28,7 +28,7 @@ EBTNodeResult::Type UBTTask_CollectAmmo::ExecuteTask(UBehaviorTreeComponent& Own
 
 		ABotController* BotCon = Cast<ABotController>(OwnerComp.GetAIOwner());
 
-		/*DrawDebugSphere(GetWorld(), ((Bot->GetActorLocation() + FVector(150.f) - Bot->GetActorLocation()) / 2) + Bot->GetActorLocation(), SearchRadius, 10, FColor::Green, true);*/
+		DrawDebugSphere(GetWorld(), ((Bot->GetActorLocation() + FVector(150.f) - Bot->GetActorLocation()) / 2) + Bot->GetActorLocation(), SearchRadius, 10, FColor::Green, true);
 
 		if (GetWorld()->SweepMultiByObjectType(OutHits, Bot->GetActorLocation(), Bot->GetActorLocation() + FVector(150.f), FQuat(), CollisionObjectParams, CollisionShape) && BotCon)
 		{
@@ -37,8 +37,10 @@ EBTNodeResult::Type UBTTask_CollectAmmo::ExecuteTask(UBehaviorTreeComponent& Own
 				if (OutHits[Hit].GetActor() && Cast<AAmmoBox>(OutHits[Hit].GetActor()))
 				{
 					//GLog->Log("found an ammo box! updating location!");
-					//DrawDebugPoint(GetWorld(), OutHits[Hit].ImpactPoint, 25.f, FColor::Black, true);
-					BotCon->SetMoveToLocation(OutHits[Hit].ImpactPoint);
+					DrawDebugPoint(GetWorld(), OutHits[Hit].ImpactPoint, 25.f, FColor::Black, true);
+					AAmmoBox* Box = Cast<AAmmoBox>(OutHits[Hit].GetActor());
+					BotCon->SetAmmoBox(Box);
+
 					return EBTNodeResult::Succeeded;
 				}
 			}

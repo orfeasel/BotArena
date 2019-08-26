@@ -38,6 +38,8 @@ public:
 
 	void SetMoveToLocation(const FVector& Location);
 
+	void SetAmmoBox(class AAmmoBox* AmmoBox);
+
 	FORCEINLINE UBehaviorTree* GetCurrentTree() { return BTAsset; }
 
 	FORCEINLINE AActor* GetSelectedTarget() const;
@@ -62,6 +64,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	FName BlackboardKey_CollectAmmo;
+
+	UPROPERTY(VisibleAnywhere)
+	FName BlackboardKey_AmmoBox;
 
 	/* Will only select target every X interval */
 	UPROPERTY(EditDefaultsOnly)
