@@ -11,6 +11,8 @@
 #include "Components/CapsuleComponent.h"
 #include "Environment/NavArea_Crouch.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "MiscClasses/BotCounter.h"
+#include "Kismet/GameplayStatics.h"
 
 bool AAICharacter::CanSeeSelectedTarget() const
 {
@@ -124,6 +126,7 @@ float AAICharacter::TakeDamage(float Damage, struct FDamageEvent const& DamageEv
 		if (GetController())
 		{
 			GetController()->UnPossess();
+			BotCounterRef->OnBotDeath(GetTeam());
 		}
 
 		//Destroy the in-game actor after a few seconds
@@ -150,6 +153,13 @@ void AAICharacter::BeginPlay()
 	if (WeaponSM)
 	{
 		WeaponSM->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), FName("WeaponSocket"));
+	}
+
+	TArray<AActor*> BotCounterArray;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABotCounter::StaticClass(), BotCounterArray);
+	if (BotCounterArray.IsValidIndex(0))
+	{
+		BotCounterRef = Cast<ABotCounter>(BotCounterArray[0]);
 	}
 }
 

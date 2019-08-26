@@ -21,6 +21,11 @@ class BOTARENA_API AAICharacter : public ACharacter
 	
 private:
 
+	/* "Hacky" way to display the number of bots.
+	 *  Ideally this functionality should be wrapped in a singleton pattern (maybe on next iteration)
+	 */
+	class ABotCounter* BotCounterRef;
+
 	bool CanSeeSelectedTarget() const;
 
 	/* Time since this character fired */
