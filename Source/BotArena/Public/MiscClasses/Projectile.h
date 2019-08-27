@@ -14,6 +14,7 @@ class BOTARENA_API AProjectile : public AActor
 
 private:
 
+	/* Called when this projectile hits something */
 	UFUNCTION()
 	void OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 	
@@ -21,17 +22,18 @@ public:
 	// Sets default values for this actor's properties
 	AProjectile();
 
+	/* Calculates the required velocity to make the projectile travel from the spawned location to the provided target*/
 	void AdjustVelocity(const FVector& ProjectileTarget);
-
-	//DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams( FComponentHitSignature, UPrimitiveComponent*, HitComponent, AActor*, OtherActor, UPrimitiveComponent*, OtherComp, FVector, NormalImpulse, const FHitResult&, Hit );
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	/* Damage that this projectile does on collision */
 	UPROPERTY(EditAnywhere)
 	float Damage;
 
+	/* A multiplier for the velocity value */
 	UPROPERTY(EditAnywhere)
 	float VelocityMultiplier;
 

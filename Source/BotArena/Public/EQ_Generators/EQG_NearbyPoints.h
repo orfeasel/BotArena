@@ -7,7 +7,10 @@
 #include "EQG_NearbyPoints.generated.h"
 
 /**
- * 
+ * A custom EQS generator that creates point in a cone-like fashion everywhere except in front of the bot
+ * This generator (in addition with a few in-editor tests) is used to perform a sidestep functionality
+ * while the bots are shooting at each other.
+ * Place an EQS testing pawn in the level and assign this generator to its EQS template to showcase the resulting points
  */
 UCLASS()
 class BOTARENA_API UEQG_NearbyPoints : public UEnvQueryGenerator_ProjectedPoints

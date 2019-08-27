@@ -21,8 +21,6 @@ EBTNodeResult::Type UBTTask_ShootTarget::ExecuteTask(UBehaviorTreeComponent& Own
 	AAICharacter* Bot = Cast<AAICharacter>(OwnerComp.GetAIOwner()->GetCharacter());
 	if (Bot)
 	{
-		//Fire the weapon and start ticking the task so we can add some delay to avoid
-		//firing multiple times in the same tick event
 		Bot->FireWeapon();
 		return EBTNodeResult::Succeeded;
 		

@@ -7,7 +7,7 @@
 #include "EQC_GetSeeingTarget.generated.h"
 
 /**
- * 
+ * An EQS context that returns a reference of the SelectedTarget for a given bot.
  */
 UCLASS()
 class BOTARENA_API UEQC_GetSeeingTarget : public UEnvQueryContext

@@ -117,15 +117,18 @@ float AAICharacter::TakeDamage(float Damage, struct FDamageEvent const& DamageEv
 			GetCharacterMovement()->UnCrouch();
 		}
 
+		//Enable ragdoll physics
 		GetMesh()->SetSimulatePhysics(true);
 		GetMesh()->SetCollisionProfileName(FName("Ragdoll"));
 		GetMesh()->SetCollisionResponseToAllChannels(ECR_Block);
 
+		//We want the other pawns to be able to walk on us (since we're currently dead :( )
 		GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 
 		if (GetController())
 		{
 			GetController()->UnPossess();
+			//Manually update the bot counter
 			BotCounterRef->OnBotDeath(GetTeam());
 		}
 
@@ -150,11 +153,15 @@ void AAICharacter::BeginPlay()
 	Super::BeginPlay();
 	Health = MaxHealth;
 
+	//If we attach the weapon in the constructor we're going to receive several warning when spawning bots
+	//So just attach the weapon inside the begin play
 	if (WeaponSM)
 	{
 		WeaponSM->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), FName("WeaponSocket"));
 	}
 
+	//Hacky way to get a reference of the Bot counter.
+	//This should be erased on the next iteration
 	TArray<AActor*> BotCounterArray;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABotCounter::StaticClass(), BotCounterArray);
 	if (BotCounterArray.IsValidIndex(0))
@@ -171,6 +178,7 @@ void AAICharacter::FireWeapon()
 
 	ABotController* BotController = Cast<ABotController>(GetController());
 
+	//Fire the weapon only if the following rules apply
 	if (World && BotController && BotController->GetSelectedTarget() && CanFireWeapon()
 		&& CanSeeSelectedTarget())
 	{

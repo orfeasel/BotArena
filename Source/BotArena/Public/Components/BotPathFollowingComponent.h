@@ -7,7 +7,9 @@
 #include "BotPathFollowingComponent.generated.h"
 
 /**
- * 
+ * This custom path following component is expanding the default path following component and its
+ * sole use in this project (for the time being) is to identify if the bot is currently standing
+ * in an area that can crouch
  */
 UCLASS()
 class BOTARENA_API UBotPathFollowingComponent : public UPathFollowingComponent

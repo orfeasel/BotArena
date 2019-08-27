@@ -13,7 +13,7 @@
 #include "DrawDebugHelpers.h"
 #include "Kismet/KismetSystemLibrary.h"
 
-void UEQC_FindAllyBots::ProvideContext(FEnvQueryInstance& QueryInstance, FEnvQueryContextData& ContextData) const
+void UDEPRECATED_UEQC_FindAllyBots::ProvideContext(FEnvQueryInstance& QueryInstance, FEnvQueryContextData& ContextData) const
 {
 	Super::ProvideContext(QueryInstance, ContextData);
 
@@ -71,7 +71,7 @@ void UEQC_FindAllyBots::ProvideContext(FEnvQueryInstance& QueryInstance, FEnvQue
 
 }
 
-bool UEQC_FindAllyBots::AlreadyTracedActor(const TArray<AActor*>& TracedActors, const AActor& ActorToCheck) const
+bool UDEPRECATED_UEQC_FindAllyBots::AlreadyTracedActor(const TArray<AActor*>& TracedActors, const AActor& ActorToCheck) const
 {
 	for (int32 ActorIndex = 0; ActorIndex < TracedActors.Num(); ActorIndex++)
 	{

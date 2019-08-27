@@ -13,10 +13,10 @@ class BOTARENA_API AAmmoBox : public AActor
 
 private:
 
-	//DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams( FComponentBeginOverlapSignature, UPrimitiveComponent*, OverlappedComponent, AActor*, OtherActor, UPrimitiveComponent*, OtherComp, int32, OtherBodyIndex, bool, bFromSweep, const FHitResult &, SweepResult);
-
+	
+	/* Called when something overlaps with the CollisionBox */
 	UFUNCTION()
-		void OnComponentBeginOverlap(UPrimitiveComponent* OveralappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void OnComponentBeginOverlap(UPrimitiveComponent* OveralappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
 public:	
 	// Sets default values for this actor's properties
@@ -26,9 +26,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	/* The minimum amount of ammo that this box can contain */
 	UPROPERTY(EditAnywhere, meta = (ClampMin = '1'))
 	int32 MinAmmo = 1;
 
+	/* The maximum amount of ammo that this box can contain */
 	UPROPERTY(EditAnywhere, meta = (ClampMin = '2'))
 	int32 MaxAmmo = 2;
 

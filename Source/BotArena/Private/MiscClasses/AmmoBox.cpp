@@ -12,6 +12,7 @@ void AAmmoBox::OnComponentBeginOverlap(UPrimitiveComponent* OveralappedComponent
 		AAICharacter* Bot = Cast<AAICharacter>(OtherActor);
 		if(Bot)
 		{
+			//A bot came and collected this ammo box
 			Bot->AddAmmo(FMath::RandRange(MinAmmo, MaxAmmo));
 			Destroy();
 		}

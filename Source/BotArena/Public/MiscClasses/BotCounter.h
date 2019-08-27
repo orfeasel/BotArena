@@ -35,15 +35,19 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	/* Returns the number of blue bots */
 	UFUNCTION(BlueprintCallable, Category=Misc)
 	int32 GetBlueBotsCount() const { return Blue_Bots; }
 
+	/* Returns the number of red bots */
 	UFUNCTION(BlueprintCallable, Category = Misc)
 	int32 GetRedBotsCount() const { return Red_Bots; }
 
+	/* Updates the corresponding bot counters */
 	UFUNCTION(BlueprintCallable, Category = Misc)
 	void OnBotSpawn(ETeam BotTeam);
 
+	/* Updates the corresponding bot counters */
 	void OnBotDeath(ETeam BotTeam);
 
 };

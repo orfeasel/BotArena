@@ -30,6 +30,7 @@ EBTNodeResult::Type UBTTask_CollectAmmo::ExecuteTask(UBehaviorTreeComponent& Own
 
 		/*DrawDebugSphere(GetWorld(), ((Bot->GetActorLocation() + FVector(150.f) - Bot->GetActorLocation()) / 2) + Bot->GetActorLocation(), SearchRadius, 10, FColor::Green, true);*/
 
+		//Perform a Sphere Sweep with the according radius to find a nearby Ammo box
 		if (GetWorld()->SweepMultiByObjectType(OutHits, Bot->GetActorLocation(), Bot->GetActorLocation() + FVector(150.f), FQuat(), CollisionObjectParams, CollisionShape) && BotCon)
 		{
 			for (int32 Hit = 0; Hit < OutHits.Num(); Hit++)

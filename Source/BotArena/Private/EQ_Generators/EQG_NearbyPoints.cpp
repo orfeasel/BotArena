@@ -26,6 +26,7 @@ void UEQG_NearbyPoints::GenerateItems(FEnvQueryInstance& QueryInstance) const
 
 	}
 
+	//Project the generated points and store them as the result of this generator
 	ProjectAndFilterNavPoints(LocationCandidates, QueryInstance);
 	StoreNavPoints(LocationCandidates, QueryInstance);
 }

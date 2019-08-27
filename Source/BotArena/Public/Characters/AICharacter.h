@@ -22,31 +22,49 @@ class BOTARENA_API AAICharacter : public ACharacter
 private:
 
 	/* "Hacky" way to display the number of bots.
-	 *  Ideally this functionality should be wrapped in a singleton pattern (maybe on next iteration)
+	 * Ideally this functionality should be wrapped in a singleton pattern (maybe on next iteration)
 	 */
 	class ABotCounter* BotCounterRef;
 
+	/*
+	 * Identifies is the bot can actually see the target or if the target is currently LOSing this instance
+	 * @return true - if we can see the target, false otherwise
+	 */
 	bool CanSeeSelectedTarget() const;
 
 	/* Time since this character fired */
 	float LastFireWeaponTime;
 
-	/* True if the character can fire the weapon */
+	/* True if the character can fire the weapon again */
 	bool CanFireWeapon() const;
 
+	/* Manually deactivate the Beam particle */
 	void DeactivateFireWeaponParticle();
 
 public:
 	// Sets default values for this character's properties
 	AAICharacter();
 
+	/*
+	 * Base Take Damage event that exists in Actor.h
+	 * @see https://www.unrealengine.com/blog/damage-in-ue4
+	 * @param DamageAmount		How much damage to apply
+	 * @param DamageEvent		Data package that fully describes the damage received.
+	 * @param EventInstigator	The Controller responsible for the damage.
+	 * @param DamageCauser		The Actor that directly caused the damage (e.g. the projectile that exploded, the rock that landed on you)
+	 * @return					The amount of damage actually applied.
+	 */
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+	/* Adds the given amount of ammo to this bot */
 	FORCEINLINE void AddAmmo(int32 Ammo) { CurrentAmmo += Ammo; }
 
+	/* Get the current ammo of this bot */
 	FORCEINLINE int32 GetCurrentAmmo() const { return CurrentAmmo; }
 
-	/* Probably shouldn't hardcode this */
+	/* 
+	 * Probably shouldn't hardcode this 
+	 */
 	FORCEINLINE bool LowOnAmmo() const { return CurrentAmmo < 10; }
 
 protected:
@@ -54,6 +72,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	/* The static mesh of the weapon */
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* WeaponSM;
 
@@ -73,9 +92,13 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 CurrentAmmo;
 
+	/* The beam particle that is activated every time the bot fires its weapon */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UParticleSystemComponent* WeaponFireFX;
 
+	/* Sub class of the projectile actor class.
+	 * Create a Blueprint based on this class and assign it here
+	 */
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AProjectile> ProjectileBP;
 
@@ -117,25 +140,37 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "BotArena")
 	void AssignTeam(ETeam NewTeam);
 
+	/* Returns true if the bot is currently alive */
 	FORCEINLINE bool IsAlive() const { return Health > 0; }
 
+	/* Attempts to fire 
+	 * There are several rules that need to apply before we actually fire, such as:
+	 * 1) A valid target must exist who is not LOSing this bot.
+	 * 2) We need to have ammo before firing
+	 * 3) The bot must be able to see the target who wishes to fire at
+	 */
 	UFUNCTION(BlueprintCallable,Category="BotArena")
 	void FireWeapon();
 
+	/* Returns true if the other bot is on the same team */
 	FORCEINLINE bool IsFriendly(const AAICharacter& OtherCharacter) const { return Team == OtherCharacter.Team; }
 
+	/* Return true if the other bot is on another team */
 	FORCEINLINE bool IsHostile(const AAICharacter& OtherCharacter) const { return !IsFriendly(OtherCharacter); }
 
+	/* Returns the current team of the bot */
 	FORCEINLINE ETeam GetTeam() const { return Team; }
 
+	/* Well this is the same as IsFriendly. Should probably pick one function on next iteration and stick with it. */
 	FORCEINLINE bool SameTeam(const AAICharacter& OtherCharacterr) const { return Team == OtherCharacterr.Team; }
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
+	/* Since this is not a playable character this should be erased on next iteration */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	/* Construction script in the C++ side */
 	virtual void OnConstruction(const FTransform& Transform) override;
 
 };

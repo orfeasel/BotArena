@@ -92,6 +92,7 @@ void ABotController::SelectTarget(const TArray<AActor*>& TargetList)
 
 	if (!ControlledCharacter || TargetList.Num()<=0) return;
 
+	//Choose the closest enemy bot
 	if (!GetSelectedTarget() || TimeSinceTargetSelection>=SelectTargetInterval)
 	{
 		//Search for the closest target
@@ -155,6 +156,7 @@ void ABotController::OnPossess(APawn* InPawn)
 		return;
 	}
 
+	//Execute the assigned behavior tree and set its sight config to identify all possible players
 	RunBehaviorTree(BTAsset);
 	if (GetPerceptionComponent())
 	{
@@ -178,6 +180,8 @@ void ABotController::Tick(float DeltaTime)
 
 	TimeSinceTargetSelection += DeltaTime;
 	
+	//If we have a valid target make sure to smoothly rotate so the bot can
+	//face him every time
 	if (BlackBoardComp)
 	{
 		UObject* SelectedTarget = BlackBoardComp->GetValueAsObject(BlackboardKey_SelectedTarget);
@@ -213,5 +217,6 @@ void ABotController::OnUnPossess()
 {
 	Super::OnUnPossess();
 
+	//By default the controller will stay in the level so manually destroy this actor
 	Destroy();
 }
