@@ -6,9 +6,9 @@ Developed with Unreal Engine 4
 
 AI Team Deathmatch. You can see a video preview of the project here: https://www.youtube.com/watch?v=e7ImcXDCv6U
 
-**The animation pack is licensed for use with Unreal Engine only and it belongs to Epic Games [for more information visit this marketplace link] (https://www.unrealengine.com/marketplace/en-US/slug/animation-starter-pack)**
+**The animation pack is licensed for use with Unreal Engine only and it belongs to Epic Games. For more information visit https://www.unrealengine.com/marketplace/en-US/slug/animation-starter-pack**
 
-The level mockup material is credited to [Tom Looman] (https://www.tomlooman.com/) and is [available for download from here] (https://www.tomlooman.com/updated-mockup-material-for-unreal-4/)
+The level mockup material is credited to [Tom Looman](https://www.tomlooman.com/) and is [available for download from here](https://www.tomlooman.com/updated-mockup-material-for-unreal-4/)
 
 Implemented features so far:
 1. AI Senses:
