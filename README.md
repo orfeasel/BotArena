@@ -12,13 +12,18 @@ The level mockup material is credited to [Tom Looman](https://www.tomlooman.com/
 
 Implemented features so far:
 1. AI Senses:
-..Hearing and
-..Sight
+
+⋅⋅⋅Hearing and
+⋅⋅⋅Sight
+
 2. A behavior tree that contains custom:
-..AI Tasks and
-..AI Services
+
+⋅⋅⋅AI Tasks and
+⋅⋅⋅AI Services
+
 3. Several Environent Queries and Environment Contexts in order for the bots to identify the best location that they need to reach based on several parameters:
-..Their health
-..Ammo count
-..Their enemies position (so they can line of sight them in case they need to retreat)
+
+⋅⋅⋅Their health
+⋅⋅⋅Ammo count
+⋅⋅⋅Their enemies position (so they can line of sight them in case they need to retreat)
 4. Custom areas and nav links where each bot can decide to either crouch or stand
