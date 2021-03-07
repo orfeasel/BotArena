@@ -1,6 +1,6 @@
 # BotArena
 
-Developed with Unreal Engine 4 - version 4.25
+Developed with Unreal Engine 4 - version 4.26
 
 ![Bot Arena gif showcase](GitHubAssets/BotArena.gif)
 
