@@ -1,6 +1,6 @@
 # BotArena
 
-Developed with Unreal Engine.
+Developed with Unreal Engine. Updated to 5.3
 
 ![Bot Arena gif showcase](GitHubAssets/BotArena.gif)
 
