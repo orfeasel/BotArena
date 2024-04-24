@@ -1,19 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "EQC_FindAllyBots.h"
+#include "EQ_Contexts/EQC_FindAllyBots.h"
 #include "EnvironmentQuery/EnvQueryTypes.h"
 #include "EnvironmentQuery/Items/EnvQueryItemType_Actor.h"
 #include "Characters/AICharacter.h"
-#include "Controllers/BotController.h"
 #include "CollisionQueryParams.h"
 #include "WorldCollision.h"
 #include "Engine/World.h"
 
 #include "DrawDebugHelpers.h"
-#include "Kismet/KismetSystemLibrary.h"
 
-void UDEPRECATED_UEQC_FindAllyBots::ProvideContext(FEnvQueryInstance& QueryInstance, FEnvQueryContextData& ContextData) const
+void UEQC_FindAllyBots::ProvideContext(FEnvQueryInstance& QueryInstance, FEnvQueryContextData& ContextData) const
 {
 	Super::ProvideContext(QueryInstance, ContextData);
 
@@ -71,7 +69,7 @@ void UDEPRECATED_UEQC_FindAllyBots::ProvideContext(FEnvQueryInstance& QueryInsta
 
 }
 
-bool UDEPRECATED_UEQC_FindAllyBots::AlreadyTracedActor(const TArray<AActor*>& TracedActors, const AActor& ActorToCheck) const
+bool UEQC_FindAllyBots::AlreadyTracedActor(const TArray<AActor*>& TracedActors, const AActor& ActorToCheck) const
 {
 	for (int32 ActorIndex = 0; ActorIndex < TracedActors.Num(); ActorIndex++)
 	{

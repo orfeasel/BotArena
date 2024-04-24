@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "AICharacter.h"
+#include "Characters/AICharacter.h"
 #include "BotCounter.generated.h"
 
 

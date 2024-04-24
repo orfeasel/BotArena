@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "EQC_GetSeeingTarget.h"
+#include "EQ_Contexts/EQC_GetSeeingTarget.h"
 #include "EnvironmentQuery/EnvQueryTypes.h"
 #include "Characters/AICharacter.h"
 #include "Controllers/BotController.h"

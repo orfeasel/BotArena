@@ -4,6 +4,7 @@
 #include "MiscClasses/Projectile.h"
 #include "Components/StaticMeshComponent.h"
 #include "Characters/AICharacter.h"
+#include "Engine/DamageEvents.h"
 
 void AProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {

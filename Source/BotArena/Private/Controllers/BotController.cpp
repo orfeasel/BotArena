@@ -3,20 +3,17 @@
 
 #include "Controllers/BotController.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "BehaviorTree/BlackboardData.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISense.h"
 #include "Perception/AISense_Sight.h"
-#include "Perception/AISense_Hearing.h"
 #include "Perception/AISenseConfig.h"
 #include "Perception/AISenseConfig_Sight.h"
-#include "Perception/AISenseConfig_Hearing.h"
 #include "Perception/AIPerceptionTypes.h"
-#include "Perception/AIPerceptionStimuliSourceComponent.h"
-#include "AICharacter.h"
+#include "Characters/AICharacter.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/BotPathFollowingComponent.h"
 #include "MiscClasses/AmmoBox.h"
+
 ABotController::ABotController()
 {
 	//Keys init

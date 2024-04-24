@@ -1,14 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTTask_ShootTarget.h"
-#include "Tasks/AITask_RunEQS.h"
+#include "AITasks/BTTask_ShootTarget.h"
 #include "AIController.h"
 #include "Characters/AICharacter.h"
-#include "BotController.h"
 #include "BehaviorTree/Tasks/BTTask_RunEQSQuery.h"
-#include "EnvironmentQuery/EnvQueryManager.h"
-#include "Tasks/AITask.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 
 UBTTask_ShootTarget::UBTTask_ShootTarget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)

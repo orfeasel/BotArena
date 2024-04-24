@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BotPathFollowingComponent.h"
+#include "Components/BotPathFollowingComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "NavArea_Crouch.h"
+#include "Environment/NavArea_Crouch.h"
 
 void UBotPathFollowingComponent::SetMoveSegment(int32 SegmentStartIndex)
 {

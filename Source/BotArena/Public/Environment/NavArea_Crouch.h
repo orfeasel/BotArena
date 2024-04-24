@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "NavAreas/NavArea.h"
-#include "NavMeshPath.h"
+#include "NavMesh/NavMeshPath.h"
 #include "NavArea_Crouch.generated.h"
 
 /**
